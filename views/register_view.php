@@ -35,6 +35,6 @@
             <input type="submit" value="会員登録">
         </p>
     </form>
-    <p><a href="#">ログインはこちら</a></p>
+    <p><a href="index.php">ログインはこちら</a></p>
 </body>
 </html>

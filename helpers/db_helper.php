@@ -19,12 +19,12 @@ function get_db_connect() {
 
 // メールアドレスの重複チェック 重複してたらtrueを返す
 function mail_exists($dbh, $mail) {
-    $sql = "SELECT COUNT(id) FROM Users where mail = :mail";
+    $sql = 'SELECT COUNT(id) FROM Users where mail = :mail';
     $stmt = $dbh->prepare($sql);
     $stmt->bindValue('mail', $mail, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($count['COUNT(id)']>0){
+    if($count['COUNT(id)'] > 0){
         return TRUE;
     }else{
         return FALSE;
@@ -46,13 +46,35 @@ function insert_users_data($dbh, $name, $mail, $password) {
         return FALSE;
     }
 }
+// メールアドレスとパスワードが一致するかしらべる関数
+
+    function select_user($dbh, $mail, $password) {
+        $sql = 'SELECT * FROM Users WHERE mail = :mail LIMIT 1';
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
+        $stmt->execute();
+        if($stmt->rowCount() > 0) {
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(password_verify($password, $data['pass'])){
+                return $data;
+            }else{
+                return FALSE;
+            }
+            return FALSE;
+        }
+    }
+
+
+
+
+
 
 // データベースからデータをとってくる(確認用)
-function select_users($dbh){
-    $data = [];
-    $sql = "SELECT * FROM Users";
-    $stmt = $dbh->prepare($sql);
-    $stmt->execute();
-    $data[] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $data;
-}
+// function select_users($dbh){
+//     $data = [];
+//     $sql = "SELECT * FROM Users";
+//     $stmt = $dbh->prepare($sql);
+//     $stmt->execute();
+//     $data[] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//     return $data;
+// }
