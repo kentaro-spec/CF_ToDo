@@ -93,6 +93,21 @@ function insert_users_data($dbh, $name, $mail, $password) {
         return $user;
     }
 
+    // プロジェクトテーブルにデータを挿入
+
+    function insert_projects_data($dbh, $pj_name, $pj_explain) {
+        
+        $sql = "INSERT INTO Projects (pj_name, pj_explain) VALUE (:pj_name, :pj_explain)";
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindValue(':pj_name', $pj_name, PDO::PARAM_STR);
+        $stmt->bindValue(':pj_explain', $pj_explain, PDO::PARAM_STR);
+        if($stmt->execute()) {
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
 
 
 // データベースからデータをとってくる(確認用)

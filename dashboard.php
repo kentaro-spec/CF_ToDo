@@ -62,4 +62,31 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 }
 
+// プロジェクトを作成
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $pj_name = get_post('pj_name');
+    $pj_explain = get_post('pj_explain');
+    
+    $dbh = get_db_connect();
+
+    // バリデーションして問題なかったら、projectsテーブルに挿入
+    $errs = [];
+
+    if (!check_words($pj_name, 50)){
+        $errs['pj_name'] = 'プロジェクト名は必須、50文字以内です。';
+    }
+    if(!check_words($pj_explain, 100)) {
+        $errs['pj_explain']='説明欄は必須、100文字以内です。';
+    }
+
+    if(empty($errs)) {
+        if(insert_projects_data($dbh, $pj_name, $pj_explain) ) {
+            header('Location:' .SITE_URL. 'project.php');
+            exit;
+        }
+        $errs['password'] ='登録に失敗しました。';
+    }
+
+}
 include_once('views/dashboard_view.php');

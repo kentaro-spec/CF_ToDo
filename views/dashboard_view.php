@@ -10,6 +10,10 @@
     <p><?php echo $update_fin ?></p>
     <h2><?php echo html_escape($user['name']);?>さんが参加しているプロジェクト</h2>
 
+    <!-- get送信 -->
+    <form action="project.php" method="get">
+        <a href="project.php?id=2">テスト</a>
+    </form>
 
     <p>アカウント情報</p>
     <form action="" method="POST" >
@@ -28,10 +32,25 @@
             <input type="text" name="comment">
             <?php echo $errs['comment'];?>
         </p>
-        
-        
         <p>
             <input type="submit" value="変更する">
+        </p>
+    </form>
+    <!-- プロジェクトフォーム -->
+    <p>プロジェクトを作る</p>
+    <form action="" method="POST" >
+        <p>
+            <label for="">プロジェクト名</label>
+            <input type="text" name="pj_name">
+            <?php echo $errs['pj_name'];?>
+        </p>
+        <p>
+            <label for="">説明</label>
+            <textarea name="pj_explain" id="" cols="30" rows="10"></textarea>
+            <?php echo $errs['pj_explain'];?>
+        </p>
+        <p>
+            <input type="submit" value="作成する">
         </p>
     </form>
 </body>
