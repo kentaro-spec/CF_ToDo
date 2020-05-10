@@ -10,7 +10,7 @@
     <p><?php echo $update_fin ?></p>
     <h2><?php echo html_escape($user['name']);?>さんが参加しているプロジェクト</h2>
 
-    <!-- get送信 -->
+    <!-- get送信? -->
     <form action="project.php" method="get">
         <a href="project.php?id=2">テスト</a>
     </form>
