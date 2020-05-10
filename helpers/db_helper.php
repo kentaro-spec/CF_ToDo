@@ -33,7 +33,7 @@ function mail_exists($dbh, $mail) {
 // データベースに入力
 function insert_users_data($dbh, $name, $mail, $password) {
     $password = password_hash($password, PASSWORD_DEFAULT);
-    $comment = 'あ';
+    // $comment = 'あ';
     $sql = "INSERT INTO Users (name, mail, pass) VALUE (:name, :mail, :pass)";
     $stmt = $dbh->prepare($sql);
     $stmt->bindValue(':name', $name, PDO::PARAM_STR);
@@ -64,8 +64,34 @@ function insert_users_data($dbh, $name, $mail, $password) {
         }
     }
 
+    // 会員情報を更新する関数
 
+    function update_user($dbh, $name, $mail,$comment,$id) {
+        $sql = "UPDATE Users SET name = :name , mail = :mail, comment = :comment WHERE id = :id ";
+        $stmt = $dbh->prepare($sql);
+        
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+        $stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
+        $stmt->bindValue(':comment', $comment, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        // $stmt->bindValue(':user', $user, PDO::PARAM_STR);
+        if($stmt->execute()) {
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
 
+    // IDが一致するUserのnameをとってくる
+    
+    function select_user_id($dbh,$id) {
+        $sql = 'SELECT * FROM Users WHERE id = :id LIMIT 1';
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $user;
+    }
 
 
 
