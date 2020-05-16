@@ -7,6 +7,8 @@
 </head>
 <body>
 <h1>ダッシュボード</h1>
+    <!-- 更新されたら、更新された旨を表示する -->
+
     <p><?php echo $update_fin ?></p>
     <h2><?php echo html_escape($user['name']);?>さんが参加しているプロジェクト</h2>
 
@@ -38,7 +40,7 @@
             <?php echo $errs['comment'];?>
         </p>
         <p>
-            <input type="submit" value="変更する">
+            <input name = "submit_user" type="submit" value="変更する">
         </p>
     </form>
     <!-- プロジェクトフォーム -->
@@ -55,7 +57,7 @@
             <?php echo $errs['pj_explain'];?>
         </p>
         <p>
-            <input type="submit" value="作成する">
+            <input name="submit_project" type="submit" value="作成する">
         </p>
     </form>
 </body>

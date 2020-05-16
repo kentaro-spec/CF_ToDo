@@ -12,6 +12,7 @@ session_start();
 if(isset($_GET['id'])) { $id = $_GET['id']; }{
     // echo $id;
     $dbh = get_db_connect();
+    // プロジェクトテーブルからIDが一致するレコードをとってくる
     $project = select_project_id($dbh,$id);
 }
 
