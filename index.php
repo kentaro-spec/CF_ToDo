@@ -8,6 +8,7 @@ require_once('helpers/extra_helper.php');
 // セッションスタート
 session_start();
 
+
 // すでにログイン済みだったらダッシュボードへ飛ばす
 if(!empty($_SESSION['user'])){
     header('Location:'.SITE_URL. 'dashboard.php');

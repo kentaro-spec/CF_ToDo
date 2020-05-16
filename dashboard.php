@@ -7,6 +7,7 @@ require_once('helpers/extra_helper.php');
 // セッションスタート
 session_start();
 
+
 // ログインしてなかったら、ログインページに戻す
 if(empty($_SESSION['user'])){
     header('Location:'.SITE_URL. 'index.php');
@@ -79,10 +80,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if(!check_words($pj_explain, 100)) {
         $errs['pj_explain']='説明欄は必須、100文字以内です。';
     }
-
+    //エラーがなかったら、Projectテーブルにデータを挿入し、パラメータにそのレコードのIDをつけて、リンクに飛ばす。 
     if(empty($errs)) {
-        if(insert_projects_data($dbh, $pj_name, $pj_explain) ) {
-            header('Location:' .SITE_URL. 'project.php');
+        if($project_id = insert_projects_data($dbh, $pj_name, $pj_explain) ) {
+            header('Location:' .SITE_URL. 'project.php?id='.$project_id);
             exit;
         }
         $errs['password'] ='登録に失敗しました。';

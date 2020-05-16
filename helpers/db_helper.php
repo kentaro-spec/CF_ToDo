@@ -93,7 +93,7 @@ function insert_users_data($dbh, $name, $mail, $password) {
         return $user;
     }
 
-    // プロジェクトテーブルにデータを挿入
+    // プロジェクトテーブルにデータを挿入し、そのレコードのIDを返す
 
     function insert_projects_data($dbh, $pj_name, $pj_explain) {
         
@@ -101,13 +101,25 @@ function insert_users_data($dbh, $name, $mail, $password) {
         $stmt = $dbh->prepare($sql);
         $stmt->bindValue(':pj_name', $pj_name, PDO::PARAM_STR);
         $stmt->bindValue(':pj_explain', $pj_explain, PDO::PARAM_STR);
+        
         if($stmt->execute()) {
-            return TRUE;
+            $project_id = $dbh->lastInsertId();
+            return $project_id;
         }else{
             return FALSE;
         }
     }
 
+    // IDが一致するProjectsのレコードをとってくる
+
+    function select_project_id($dbh,$id) {
+        $sql = 'SELECT * FROM Projects WHERE id = :id LIMIT 1';
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $project = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $project;
+    }
 
 
 // データベースからデータをとってくる(確認用)
