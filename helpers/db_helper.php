@@ -30,7 +30,7 @@ function mail_exists($dbh, $mail) {
         return FALSE;
     }
 }
-// データベースに入力
+// Usersデータベースに入力して、そのレコードのIDを返す
 function insert_users_data($dbh, $name, $mail, $password) {
     $password = password_hash($password, PASSWORD_DEFAULT);
     // $comment = 'あ';
@@ -41,11 +41,13 @@ function insert_users_data($dbh, $name, $mail, $password) {
     $stmt->bindValue(':pass', $password, PDO::PARAM_STR);
     // $stmt->bindValue(':comment', $comment, PDO::PARAM_STR);
     if($stmt->execute()) {
-        return TRUE;
+        $user_id = $dbh->lastInsertId();
+            return $user_id;
     }else{
         return FALSE;
     }
 }
+
 // メールアドレスとパスワードが一致するかしらべる関数
 
     function select_user($dbh, $mail, $password) {
@@ -122,8 +124,54 @@ function insert_users_data($dbh, $name, $mail, $password) {
     }
 
 
+    // taskデータベースに挿入
+function insert_task_data($dbh, $main_user_id, $sub_user_id, $title, $deadline) {
+    $sql = "INSERT INTO Tasks (main_user_id, sub_user_id, title, deadline) VALUE (:main_user_id, :sub_user_id, :title, :deadline)";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindValue(':main_user_id', $main_user_id, PDO::PARAM_INT);
+    $stmt->bindValue(':sub_user_id', $sub_user_id, PDO::PARAM_INT);
+    $stmt->bindValue(':title', $title, PDO::PARAM_STR);
+    $stmt->bindValue(':deadline', $deadline, PDO::PARAM_STR);
+    if($stmt->execute()) {
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
+
+// Membersテーブルのチェック
+function check_Members_data($dbh, $user_id, $project_id) {
+    $sql = 'SELECT * FROM Members WHERE project_id = :project_id AND user_id = :user_id ';
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindValue(':project_id', $project_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // var_dump($result);
+    if($result) {
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
+
+// Membersテーブルにデータを挿入
+function insert_Members_data($dbh, $user_id, $project_id) {
+    $sql = 'INSERT INTO Members (user_id, project_id) VALUE (:user_id, :project_id)';
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindValue(':project_id', $project_id, PDO::PARAM_INT);
+    
+    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($stmt->execute()) {
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
+
 // データベースからデータをとってくる(確認用)
-// function select_users($dbh){
+// function select_users($dbh{
 //     $data = [];
 //     $sql = "SELECT * FROM Users";
 //     $stmt = $dbh->prepare($sql);

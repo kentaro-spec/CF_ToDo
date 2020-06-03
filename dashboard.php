@@ -6,6 +6,7 @@ require_once('helpers/extra_helper.php');
 
 // セッションスタート
 session_start();
+var_dump($_SESSION);
 
 
 // ログインしてなかったら、ログインページに戻す
@@ -84,10 +85,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
         //エラーがなかったら、Projectテーブルにデータを挿入し、パラメータにそのレコードのIDをつけて、リンクに飛ばす。 
         if(empty($errs)) {
-            if($project_id = insert_projects_data($dbh, $pj_name, $pj_explain) ) {
+            $project_id = insert_projects_data($dbh, $pj_name, $pj_explain);
+            // Membersテーブルに挿入。
+            $user_id = $user['id'];
+            insert_Members_data($dbh, $user_id, $project_id);
+
                 header('Location:' .SITE_URL. 'project.php?id='.$project_id);
                 exit;
-            }
+            
             $errs['password'] ='登録に失敗しました。';
         }
     
